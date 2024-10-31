@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAPPY LEWIS' BIRTHDAY</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom right, #ffdee9, #b5fffc);
+            font-family: 'Dancing Script', cursive;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 2.8em;
+            color: #FF69B4;
+            margin: 20px 0;
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .box {
+            width: 120px;
+            height: 120px;
+            background-color: rgba(255, 182, 193, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: transform 0.3s ease, background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .box.opened {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: scale(1.1);
+            animation: reveal 0.5s ease-out;
+        }
+        .box.destroyed {
+            background-color: #d3d3d3;
+            color: #666;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        .box span {
+            display: none;
+            font-size: 34px;
+        }
+        .box.opened span {
+            display: block;
+        }
+        /* Fireworks animation */
+        .fireworks {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            animation: explode 0.8s ease-out forwards;
+            pointer-events: none;
+        }
+        .fireworks::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 192, 203, 1) 0%, rgba(255,192,203,0) 70%);
+            border-radius: 50%;
+            animation: explode 0.8s ease-out forwards;
+        }
+        @keyframes explode {
+            from { transform: scale(0); opacity: 1; }
+            to { transform: scale(3); opacity: 0; }
+        }
+        @keyframes reveal {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<audio autoplay loop>
+  <source src="https://example.com/happy_birthday_song.mp3" type="audio/mpeg">
+</audio>
+
+<h1>HAPPY LEWIS' BIRTHDAY 🎉</h1>
+<div class="container">
+    <div class="box" onclick="checkAnswer(this, '🎂', '小宝的手机号？', '17600111827', '小宝生日快乐，送你一份生日蛋糕，款式你挑我来买单')"><span>🎂</span></div>
+    <div class="box" onclick="checkAnswer(this, '🦆', '小宝的身份证号？', '130281200110110011', '恭喜小宝获得周黑鸭零食大礼包一份')"><span>🦆</span></div>
+    <div class="box" onclick="checkAnswer(this, '🌶️', '我们一起吃的第一顿饭在哪家？', '喝二两饺子馆', '恭喜小宝获得辣条大礼包一份')"><span>🌶️</span></div>
+    <div class="box" onclick="checkAnswer(this, '💰', '一起吃过最贵的饭是什么？', '榴莲海鲜自助', '神秘奖金')"><span>💰</span></div>
+    <div class="box" onclick="checkAnswer(this, '🈳', '第一次表白那天吃的什么？', '日料', '很遗憾小宝，这里什么也没有')"><span>🈳</span></div>
+    <div class="box" onclick="checkAnswer(this, '🌹', '那就说句我爱涛涛吧', '我爱涛涛', '宝宝送你漂亮的花花，祝你生日快乐')"><span>🌹</span></div>
+    <div class="box" onclick="checkAnswer(this, '👄', '第一次出深圳外吃的什么？', '早茶', '小宝亲亲')"><span>👄</span></div>
+    <div class="box" onclick="checkAnswer(this, '🧧', '第一次找人帮咱俩拍合照是在哪？', '深圳野生动物园', '恭喜小宝获得现金红包52.0，爱你😘')"><span>🧧</span></div>
+    <div class="box" onclick="checkAnswer(this, '🎶', '第二座一起爬的山是什么山？', '铁仔山', '祝贺小宝生日快乐，为你献上一首生日歌~')"><span>🎶</span></div>
+</div>
+
+<script>
+    function checkAnswer(element, content, question, answer, message) {
+        if (element.classList.contains('opened') || element.classList.contains('destroyed')) return;
+        let attempts = element.dataset.attempts ? parseInt(element.dataset.attempts) : 0;
+        
+        const userInput = prompt(question);
+        if (userInput && userInput.trim() === answer) {
+            element.classList.add('opened');
+            element.querySelector('span').style.display = 'block';
+            element.style.cursor = 'default';
+            displayFireworks(element);  // Show fireworks on success
+            alert(message);
+
+            if (content === '💰') {
+                let confirmChoice = confirm("恭喜小宝获得神秘奖金，本金为13.14，是否选择翻倍？（0.1-10倍）");
+                let reward;
+                if (confirmChoice) {
+                    const multiplier = (Math.random() * (10 - 0.1) + 0.1).toFixed(2);
+                    reward = (13.14 * multiplier).toFixed(2);
+                } else {
+                    reward = "13.14";
+                }
+                alert(`恭喜小宝获得${reward}元红包！`);
+            }
+
+        } else {
+            attempts += 1;
+            element.dataset.attempts = attempts;
+            if (attempts === 1) {
+                alert("再好好想想吧小宝");
+            } else if (attempts === 2) {
+                alert("还是不对哦小宝");
+            } else if (attempts >= 3) {
+                element.classList.add('destroyed');
+                element.style.cursor = 'not-allowed';
+                element.innerHTML = '❌';
+                alert("可恶，这你都不知道，礼物没啦");
+            }
+        }
+    }
+
+    function displayFireworks(element) {
+        const fireworks = document.createElement("div");
+        fireworks.classList.add("fireworks");
+        element.appendChild(fireworks);
+        setTimeout(() => fireworks.remove(), 800);
+    }
+</script>
+
+
+        <div id="congratsBanner" style="display: none; font-size: 3em; color: #FF69B4; text-align: center; margin-top: 20px;">恭喜小宝全部答对！</div>
+
+        <script>
+            function checkAllBoxesOpened() {
+                const boxes = document.querySelectorAll('.box');
+                const allOpened = Array.from(boxes).every(box => box.classList.contains('opened') || box.classList.contains('destroyed'));
+                if (allOpened) {
+                    document.getElementById('congratsBanner').style.display = 'block';
+                }
+            }
+
+            function checkAnswer(element, content, question, answer, message) {
+                if (element.classList.contains('opened') || element.classList.contains('destroyed')) return;
+                let attempts = element.dataset.attempts ? parseInt(element.dataset.attempts) : 0;
+                
+                const userInput = prompt(question);
+                if (userInput && userInput.trim() === answer) {
+                    element.classList.add('opened');
+                    element.querySelector('span').style.display = 'block';
+                    element.style.cursor = 'default';
+                    displayFireworks(element);  // Show fireworks on success
+                    alert(message);
+                    checkAllBoxesOpened(); // Check if all boxes are opened after answering correctly
+
+                    if (content === '💰') {
+                        let confirmChoice = confirm("恭喜小宝获得神秘奖金，本金为13.14，是否选择翻倍？（0.1-10倍）");
+                        let reward;
+                        if (confirmChoice) {
+                            const multiplier = (Math.random() * (10 - 0.1) + 0.1).toFixed(2);
+                            reward = (13.14 * multiplier).toFixed(2);
+                        } else {
+                            reward = "13.14";
+                        }
+                        alert(`恭喜小宝获得${reward}元红包！`);
+                    }
+
+                } else {
+                    attempts += 1;
+                    element.dataset.attempts = attempts;
+                    if (attempts === 1) {
+                        alert("再好好想想吧小宝");
+                    } else if (attempts === 2) {
+                        alert("还是不对哦小宝");
+                    } else if (attempts >= 3) {
+                        element.classList.add('destroyed');
+                        element.style.cursor = 'not-allowed';
+                        element.innerHTML = '❌';
+                        alert("可恶，这你都不知道，礼物没啦");
+                    }
+                }
+            }
+        </script>
+
+        </body>
+        
+</html>
